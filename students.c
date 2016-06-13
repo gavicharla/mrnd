@@ -47,9 +47,9 @@ void build_no_leaf(int pages,int where,int offset)
 			memset(&temp,0,sizeof(non_leaf));
 			temp.keys[0] = s[0].keys[1]+1;
 			temp.keys[1] = s[1].keys[1] +1;
-			temp.offset[0] = offset*3;
-			temp.offset[1] = offset*3 +1;
-			temp.offset[2] = offset*3 +2;
+			temp.offset[0] = offset++;
+			temp.offset[1] = offset++;
+			temp.offset[2] = offset++;
 			temp.flag = 1;
 			printf("level x %d %d %d %d %d\n",temp.keys[0],temp.keys[1],temp.offset[0],temp.offset[1],temp.offset[2]);
 			FILE * write  = fopen("students.bin","ab+");	
@@ -72,7 +72,7 @@ void build_no_leaf(int pages,int where,int offset)
 			//writing the offsets
 			temp_i = 0;
 			for(;temp_i<k;temp_i++)
-				temp.offset[temp_i] = offset*3 + temp_i;
+				temp.offset[temp_i] = offset++;
 			printf("%d x %d %d %d %d %d\n",pages,temp.keys[0],temp.keys[1],temp.offset[0],temp.offset[1],temp.offset[2]);
 			temp.flag = 1;	
 			FILE * write  = fopen("students.bin","ab+");	
@@ -82,7 +82,6 @@ void build_no_leaf(int pages,int where,int offset)
 
 				}
 		i++;
-		offset++;
 		
 		
 	}
@@ -99,11 +98,11 @@ void build_btree(int pages)
 	student s[3];
 
 		non_leaf temp ;
-	while((i*3)<pages)
+	while((i)<pages)
 	{
 		memset(&s,0,sizeof(student)*3);
 		memset(&temp,0,sizeof(non_leaf));
-		if(i*3+2<pages)
+		if(i+2<pages)
 		{
 			int k=0;
 			while(k<3)
@@ -114,7 +113,7 @@ void build_btree(int pages)
 				temp.keys[k] = s[k+1].roll_no;
 			k =0;
 			for(;k<3;k++)
-				temp.offset[k] =  i*3+k;
+				temp.offset[k] =  i++;
 		}
 		else
 		{
@@ -132,14 +131,14 @@ void build_btree(int pages)
 			//writing the offsets
 			temp_i = 0;
 			for(;temp_i<k;temp_i++)
-				temp.offset[temp_i] = i*3 + temp_i;
+				temp.offset[temp_i] = i++;
 		}
 		temp.flag =1;
 		printf("leve 1 %d %d %d %d %d\n",temp.keys[0],temp.keys[1],temp.offset[0],temp.offset[1],temp.offset[2]);
 		FILE * write  = fopen("students.bin","ab+");
 		fwrite(&temp,sizeof(non_leaf),1,write);
 		fclose(write);
-		i++;
+		
 	}
 	int j = ftell(fp);
 	fclose(fp);
